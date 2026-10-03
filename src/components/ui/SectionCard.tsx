@@ -14,12 +14,12 @@ export function SectionCard({ title, description, children, className = '', labe
   return (
     <section
       aria-labelledby={titleId}
-      className={`rounded-xl border border-line bg-raised p-5 transition-colors duration-200 motion-reduce:transition-none sm:p-6 ${className}`}
+      className={`rounded-xl border border-line bg-raised p-5 shadow-[0_1px_2px_rgb(0_0_0/0.05)] transition-colors duration-200 motion-reduce:transition-none sm:p-6 ${className}`}
     >
-      <h2 id={titleId} className="text-xs font-semibold uppercase tracking-[0.08em] text-muted">
+      <h2 id={titleId} className="text-sm font-semibold tracking-tight text-ink">
         {title}
       </h2>
-      {description ? <p className="mt-1.5 text-sm leading-relaxed text-muted">{description}</p> : null}
+      {description ? <p className="mt-1 text-sm leading-relaxed text-muted">{description}</p> : null}
       <div className="mt-5">{children}</div>
     </section>
   );

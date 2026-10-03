@@ -19,7 +19,7 @@ export function Header() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <header className="border-b border-line transition-colors duration-200 motion-reduce:transition-none">
+    <header className="border-b border-line bg-raised transition-colors duration-200 motion-reduce:transition-none">
       <div className="sp-container flex h-16 items-center gap-3">
         <a
           href={link('')}

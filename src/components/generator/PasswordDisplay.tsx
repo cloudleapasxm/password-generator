@@ -13,10 +13,11 @@ interface PasswordDisplayProps {
 const COPY_RESET_MS = 2000;
 
 /**
- * The central readout: a wrap-safe monospace field (long passwords wrap
- * instead of scrolling or clipping) with a dedicated action row — Copy as
- * the primary action, reveal and regenerate as secondary icon buttons.
- * Copy gives clear success/error feedback announced to assistive tech.
+ * The hero of the page: one composed card holding the generated password
+ * (large monospace on a whisper of accent tint) with its actions in a
+ * dedicated row below — Copy as the primary action, reveal and regenerate
+ * as secondary icon buttons. Copy gives clear success/error feedback
+ * announced to assistive tech.
  */
 export function PasswordDisplay({ password, onRegenerate, disabled = false }: PasswordDisplayProps) {
   const [revealed, setRevealed] = useState(true);
@@ -50,39 +51,39 @@ export function PasswordDisplay({ password, onRegenerate, disabled = false }: Pa
 
   return (
     <div>
-      <div
-        className="rounded-lg border border-line bg-surface px-4 py-3 transition-colors duration-200 motion-reduce:transition-none"
-        aria-label="Generated password"
-      >
-        <output
-          key={password}
-          aria-live="off"
-          className="pw-fade block break-all font-mono text-[17px] leading-7 tracking-wide text-ink"
-        >
-          {password ? shown : <span className="text-faint">—</span>}
-        </output>
-      </div>
+      <div className="overflow-hidden rounded-xl border border-line bg-raised shadow-[0_1px_2px_rgb(0_0_0/0.05)] transition-colors duration-200 motion-reduce:transition-none">
+        <div className="bg-accent/[0.07] px-5 py-5" aria-label="Generated password">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted">
+            Generated password
+          </p>
+          <output
+            key={password}
+            aria-live="off"
+            className="pw-fade mt-2 block break-all font-mono text-xl leading-9 tracking-wide text-ink sm:text-[22px]"
+          >
+            {password ? shown : <span className="text-faint">—</span>}
+          </output>
+        </div>
 
-      <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
-        <Button
-          type="button"
-          variant={copyState === 'copied' ? 'success' : 'primary'}
-          onClick={handleCopy}
-          disabled={disabled || !password}
-          aria-live="off"
-          className="w-full sm:w-auto sm:min-w-[11rem]"
-        >
-          {copyState === 'copied' ? (
-            <>
-              <Check className="h-5 w-5" aria-hidden="true" /> Copied!
-            </>
-          ) : (
-            <>
-              <Copy className="h-5 w-5" aria-hidden="true" /> Copy password
-            </>
-          )}
-        </Button>
-        <div className="flex gap-2">
+        <div className="flex gap-2 border-t border-line bg-raised px-4 py-3">
+          <Button
+            type="button"
+            variant={copyState === 'copied' ? 'success' : 'primary'}
+            onClick={handleCopy}
+            disabled={disabled || !password}
+            aria-live="off"
+            className="min-w-0 flex-1"
+          >
+            {copyState === 'copied' ? (
+              <>
+                <Check className="h-5 w-5" aria-hidden="true" /> Copied!
+              </>
+            ) : (
+              <>
+                <Copy className="h-5 w-5" aria-hidden="true" /> Copy password
+              </>
+            )}
+          </Button>
           <Tooltip label={revealed ? 'Hide password' : 'Show password'}>
             <Button
               type="button"
@@ -92,7 +93,7 @@ export function PasswordDisplay({ password, onRegenerate, disabled = false }: Pa
               aria-label={revealed ? 'Hide password' : 'Show password'}
               aria-pressed={revealed}
               disabled={disabled || !password}
-              className="btn-reveal"
+              className="btn-reveal shrink-0"
             >
               {revealed ? <EyeOff className="h-5 w-5" aria-hidden="true" /> : <Eye className="h-5 w-5" aria-hidden="true" />}
             </Button>
@@ -105,7 +106,7 @@ export function PasswordDisplay({ password, onRegenerate, disabled = false }: Pa
               onClick={onRegenerate}
               aria-label="Generate a new password"
               disabled={disabled}
-              className="btn-regenerate"
+              className="btn-regenerate shrink-0"
             >
               <RefreshCw className="h-5 w-5" aria-hidden="true" />
             </Button>

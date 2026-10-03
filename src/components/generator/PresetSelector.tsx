@@ -35,10 +35,14 @@ export function PresetSelector({ activePresetId, onSelect }: PresetSelectorProps
                 : 'border-line bg-raised can-hover:hover:border-line-strong can-hover:hover:bg-surface active:bg-surface'
             }`}
           >
-            <Icon
-              className={`h-5 w-5 shrink-0 transition-colors duration-150 ${active ? 'text-accent' : 'text-muted'}`}
+            <span
               aria-hidden="true"
-            />
+              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition-colors duration-150 ${
+                active ? 'bg-accent/15 text-accent' : 'bg-surface text-muted'
+              }`}
+            >
+              <Icon className="h-5 w-5" aria-hidden="true" />
+            </span>
             <span className="min-w-0">
               <span className="block text-sm font-medium text-ink">{preset.name}</span>
               <span className="block truncate text-xs text-muted">{preset.description}</span>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { LIMITS } from '../../lib/password-generator';
 import type { GeneratorConfig } from '../../types/password';
@@ -99,6 +99,13 @@ export function AdvancedOptions({ config, onChange }: AdvancedOptionsProps) {
                     onChange={(e) => onChange({ wordCount: Number(e.target.value) })}
                     aria-valuetext={`${config.wordCount} words`}
                     className="pw-slider mt-1 w-full"
+                    style={
+                      {
+                        '--sp-pct': `${
+                          ((config.wordCount - LIMITS.minWords) / (LIMITS.maxWords - LIMITS.minWords)) * 100
+                        }%`,
+                      } as CSSProperties
+                    }
                   />
                 </div>
                 <div>

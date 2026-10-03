@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { LIMITS } from '../../lib/password-generator';
 
 interface PasswordLengthProps {
@@ -22,6 +22,8 @@ export function PasswordLength({ value, onChange, min = LIMITS.minLength, max = 
   };
 
   const clamp = (n: number) => Math.min(max, Math.max(min, n));
+
+  const fillPct = max > min ? ((value - min) / (max - min)) * 100 : 0;
 
   const commitRaw = (raw: string) => {
     const trimmed = raw.trim();
@@ -74,6 +76,7 @@ export function PasswordLength({ value, onChange, min = LIMITS.minLength, max = 
         }}
         aria-valuetext={`${value} characters`}
         className="pw-slider mt-2 w-full"
+        style={{ '--sp-pct': `${fillPct}%` } as CSSProperties}
       />
       <div className="mt-0.5 flex justify-between text-xs tabular-nums text-faint" aria-hidden="true">
         <span>{min}</span>
