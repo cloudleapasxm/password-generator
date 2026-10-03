@@ -7,6 +7,8 @@ export default defineConfig({
   // Static-first output: the whole app prerenders to plain HTML/CSS/JS.
   output: 'static',
   site: 'https://cloudleapasxm.github.io/password-generator/',
+  // Project Pages are served under /<repo>/, so assets must use a base path.
+  base: '/password-generator',
   integrations: [
     react(),
     tailwind({
