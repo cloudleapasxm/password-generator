@@ -18,7 +18,7 @@ const ICONS: Record<string, typeof Zap> = {
 /** Six one-click configurations that reconfigure the generator. */
 export function PresetSelector({ activePresetId, onSelect }: PresetSelectorProps) {
   return (
-    <div role="group" aria-label="Password presets" className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+    <div role="group" aria-label="Password presets" className="grid grid-cols-1 gap-2 min-[420px]:grid-cols-2 xl:grid-cols-2">
       {PRESETS.map((preset) => {
         const Icon = ICONS[preset.id] ?? Zap;
         const active = preset.id === activePresetId;
@@ -29,21 +29,19 @@ export function PresetSelector({ activePresetId, onSelect }: PresetSelectorProps
             onClick={() => onSelect(preset.id)}
             aria-pressed={active}
             title={preset.description}
-            className={`flex min-h-[44px] items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:focus-visible:ring-blue-400 ${
+            className={`flex min-h-[44px] items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
               active
-                ? 'border-blue-600 bg-blue-50 dark:border-blue-400 dark:bg-blue-950/40'
-                : 'border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700 dark:hover:bg-zinc-800/60'
+                ? 'border-accent bg-accent/10'
+                : 'border-line bg-raised can-hover:hover:border-line-strong can-hover:hover:bg-surface active:bg-surface'
             }`}
           >
             <Icon
-              className={`h-5 w-5 shrink-0 ${active ? 'text-blue-700 dark:text-blue-400' : 'text-zinc-500 dark:text-zinc-400'}`}
+              className={`h-5 w-5 shrink-0 transition-colors duration-150 ${active ? 'text-accent' : 'text-muted'}`}
               aria-hidden="true"
             />
             <span className="min-w-0">
-              <span className={`block text-sm font-medium ${active ? 'text-blue-900 dark:text-blue-200' : 'text-zinc-900 dark:text-zinc-100'}`}>
-                {preset.name}
-              </span>
-              <span className="block truncate text-xs text-zinc-500 dark:text-zinc-400">{preset.description}</span>
+              <span className="block text-sm font-medium text-ink">{preset.name}</span>
+              <span className="block truncate text-xs text-muted">{preset.description}</span>
             </span>
           </button>
         );

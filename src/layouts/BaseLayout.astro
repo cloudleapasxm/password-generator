@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { basePath } from '../lib/site';
 
 interface Props {
   title: string;
@@ -9,8 +10,8 @@ interface Props {
 
 const { title, description, canonicalPath = '/' } = Astro.props;
 const site = 'https://cloudleapasxm.github.io/password-generator';
-const canonical = new URL(canonicalPath, site).toString();
-const ogImage = new URL('/favicon.svg', site).toString();
+const canonical = new URL(canonicalPath, `${site}/`).toString();
+const ogImage = new URL('favicon.svg', `${site}/`).toString();
 ---
 
 <!doctype html>
@@ -23,7 +24,7 @@ const ogImage = new URL('/favicon.svg', site).toString();
     <link rel="canonical" href={canonical} />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#18181b" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)" />
 
     {/* Open Graph */}
     <meta property="og:type" content="website" />
@@ -38,7 +39,7 @@ const ogImage = new URL('/favicon.svg', site).toString();
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={`${basePath()}favicon.svg`} />
 
     {/* Apply the saved theme before first paint to avoid a theme flash.
         Only the theme *preference* is read here — never any password data. */}
@@ -57,7 +58,7 @@ const ogImage = new URL('/favicon.svg', site).toString();
       })();
     </script>
   </head>
-  <body class="bg-white font-sans text-zinc-900 antialiased transition-colors duration-200 motion-reduce:transition-none dark:bg-zinc-900 dark:text-zinc-100">
+  <body class="bg-canvas font-sans text-ink antialiased">
     <slot />
   </body>
 </html>

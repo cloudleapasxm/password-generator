@@ -10,41 +10,41 @@ import Footer from '../components/layout/Footer.astro';
   canonicalPath="/about"
 >
   <Header client:load />
-  <main class="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6">
-    <h1 class="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl dark:text-zinc-50">About SecurePass</h1>
-    <div class="prose-securepass mt-6 space-y-6 text-sm leading-relaxed text-zinc-600 sm:text-base dark:text-zinc-400">
+  <main class="sp-container max-w-3xl py-10">
+    <h1 class="text-2xl font-bold tracking-tight text-ink sm:text-3xl">About SecurePass</h1>
+    <div class="mt-6 space-y-6 text-sm leading-relaxed text-muted sm:text-base">
       <p>
         SecurePass is a password generator that runs entirely in your browser. There is no
         account to create, no server that sees your passwords, and no analytics watching
         what you generate. The page you are reading <em>is</em> the whole application.
       </p>
 
-      <h2 class="text-lg font-semibold text-zinc-900 dark:text-zinc-50">How generation works</h2>
+      <h2 class="text-lg font-semibold tracking-tight text-ink">How generation works</h2>
       <ul class="list-disc space-y-2 pl-5">
         <li>
-          Randomness comes from the <strong>Web Crypto API</strong>
-          (<code class="font-mono text-[0.9em]">crypto.getRandomValues()</code>) — the same
-          cryptographic source browsers use for TLS keys. <code class="font-mono text-[0.9em]">Math.random()</code>
+          Randomness comes from the <strong class="font-semibold text-ink">Web Crypto API</strong>
+          (<code class="font-mono text-[0.9em] text-ink">crypto.getRandomValues()</code>) — the same
+          cryptographic source browsers use for TLS keys. <code class="font-mono text-[0.9em] text-ink">Math.random()</code>
           is never used for anything secret.
         </li>
         <li>
-          Random values are mapped to characters with <strong>rejection sampling</strong>,
+          Random values are mapped to characters with <strong class="font-semibold text-ink">rejection sampling</strong>,
           so every character in a pool is equally likely (no modulo bias).
         </li>
         <li>
           When “require one character from each group” is on, the forced characters are
-          <strong> shuffled into random positions</strong> with a cryptographic shuffle —
+          <strong class="font-semibold text-ink"> shuffled into random positions</strong> with a cryptographic shuffle —
           they never sit in predictable spots.
         </li>
         <li>
-          Passphrases draw from the bundled <strong>EFF large word list</strong> (7,776 words,
+          Passphrases draw from the bundled <strong class="font-semibold text-ink">EFF large word list</strong> (7,776 words,
           ~12.9 bits of entropy per word), also via the Web Crypto API.
         </li>
       </ul>
 
-      <h2 class="text-lg font-semibold text-zinc-900 dark:text-zinc-50">What the strength meter means</h2>
+      <h2 class="text-lg font-semibold tracking-tight text-ink">What the strength meter means</h2>
       <p>
-        The meter shows an <strong>estimated entropy</strong> in bits, computed from the
+        The meter shows an <strong class="font-semibold text-ink">estimated entropy</strong> in bits, computed from the
         password length and the effective character pool (or word-list size for passphrases).
         It is a way to compare settings — not a guarantee. Real-world security also depends
         on phishing resistance, password reuse, and whether a password has leaked before.
@@ -52,21 +52,21 @@ import Footer from '../components/layout/Footer.astro';
         passwords per site remains the best practical advice.
       </p>
 
-      <h2 class="text-lg font-semibold text-zinc-900 dark:text-zinc-50">Technology</h2>
+      <h2 class="text-lg font-semibold tracking-tight text-ink">Technology</h2>
       <p>
-        Built with <strong>Astro</strong> (static-first pages), <strong>React</strong> islands
-        (only the interactive generator hydrates), <strong>TypeScript</strong>,
-        <strong> Tailwind CSS</strong>, and <strong>Lucide</strong> icons. The generation logic
-        is deliberately separated from the UI in <code class="font-mono text-[0.9em]">src/lib/</code>
+        Built with <strong class="font-semibold text-ink">Astro</strong> (static-first pages), <strong class="font-semibold text-ink">React</strong> islands
+        (only the interactive generator hydrates), <strong class="font-semibold text-ink">TypeScript</strong>,
+        <strong class="font-semibold text-ink"> Tailwind CSS</strong>, and <strong class="font-semibold text-ink">Lucide</strong> icons. The generation logic
+        is deliberately separated from the UI in <code class="font-mono text-[0.9em] text-ink">src/lib/</code>
         so it stays small, testable, and easy to audit.
       </p>
 
-      <h2 class="text-lg font-semibold text-zinc-900 dark:text-zinc-50">Open source</h2>
+      <h2 class="text-lg font-semibold tracking-tight text-ink">Open source</h2>
       <p>
         The full source is available on{' '}
         <a
           href="https://github.com/cloudleapasxm/password-generator"
-          class="font-medium text-blue-700 underline decoration-blue-700/30 underline-offset-2 hover:decoration-blue-700 dark:text-blue-400 dark:decoration-blue-400/30 dark:hover:decoration-blue-400"
+          class="font-medium text-accent underline decoration-accent/30 underline-offset-2 can-hover:hover:decoration-accent"
         >
           GitHub
         </a>

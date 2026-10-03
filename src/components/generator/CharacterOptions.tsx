@@ -22,18 +22,18 @@ function Checkbox({
   return (
     <label
       htmlFor={id}
-      className="flex min-h-[44px] cursor-pointer items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800"
+      className="flex min-h-[44px] cursor-pointer items-center gap-3 rounded-lg px-2.5 py-2 transition-colors duration-150 can-hover:hover:bg-surface active:bg-surface motion-reduce:transition-none"
     >
       <input
         id={id}
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="h-5 w-5 shrink-0 cursor-pointer rounded accent-blue-700 dark:accent-blue-500"
+        className="h-5 w-5 shrink-0 cursor-pointer rounded accent-accent"
       />
       <span className="min-w-0">
-        <span className="block text-sm font-medium text-zinc-900 dark:text-zinc-100">{label}</span>
-        <span className="block truncate font-mono text-xs text-zinc-500 dark:text-zinc-400">{hint}</span>
+        <span className="block text-sm font-medium text-ink">{label}</span>
+        <span className="block truncate font-mono text-xs text-muted">{hint}</span>
       </span>
     </label>
   );
@@ -43,8 +43,8 @@ function Checkbox({
 export function CharacterOptions({ config, onChange }: CharacterOptionsProps) {
   return (
     <fieldset>
-      <legend className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Characters</legend>
-      <div className="mt-2 grid grid-cols-1 gap-1 sm:grid-cols-2">
+      <legend className="text-sm font-medium text-ink">Characters</legend>
+      <div className="mt-2 grid grid-cols-1 gap-1 min-[420px]:grid-cols-2">
         <Checkbox
           id="opt-uppercase"
           checked={config.includeUppercase}
@@ -74,7 +74,7 @@ export function CharacterOptions({ config, onChange }: CharacterOptionsProps) {
           hint={SYMBOLS}
         />
       </div>
-      <div className="mt-1">
+      <div className="mt-1 border-t border-line pt-1">
         <Checkbox
           id="opt-ambiguous"
           checked={config.excludeAmbiguous}

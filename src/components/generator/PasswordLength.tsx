@@ -36,7 +36,7 @@ export function PasswordLength({ value, onChange, min = LIMITS.minLength, max = 
   return (
     <div>
       <div className="flex items-center justify-between gap-4">
-        <label htmlFor="pw-length" className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+        <label htmlFor="pw-length" className="text-sm font-medium text-ink">
           Length
         </label>
         <div className="flex items-center gap-2">
@@ -54,9 +54,9 @@ export function PasswordLength({ value, onChange, min = LIMITS.minLength, max = 
             onKeyDown={(e) => {
               if (e.key === 'Enter') commitRaw((e.target as HTMLInputElement).value);
             }}
-            className="h-11 w-20 rounded-lg border border-zinc-200 bg-white px-2 text-center text-sm font-medium text-zinc-900 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/30 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:focus:border-blue-400"
+            className="sp-number h-10 w-[4.5rem] rounded-lg border border-line bg-raised px-2 text-center font-mono text-sm font-medium text-ink transition-colors duration-150 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30 motion-reduce:transition-none"
           />
-          <span className="text-sm text-zinc-500 dark:text-zinc-400" aria-hidden="true">
+          <span className="text-sm tabular-nums text-muted" aria-hidden="true">
             chars
           </span>
         </div>
@@ -73,9 +73,9 @@ export function PasswordLength({ value, onChange, min = LIMITS.minLength, max = 
           onChange(Number(e.target.value));
         }}
         aria-valuetext={`${value} characters`}
-        className="pw-slider mt-3 w-full"
+        className="pw-slider mt-2 w-full"
       />
-      <div className="mt-1 flex justify-between text-xs text-zinc-500 dark:text-zinc-400" aria-hidden="true">
+      <div className="mt-0.5 flex justify-between text-xs tabular-nums text-faint" aria-hidden="true">
         <span>{min}</span>
         <span>{max}</span>
       </div>

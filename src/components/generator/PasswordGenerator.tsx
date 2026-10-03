@@ -43,14 +43,14 @@ export function PasswordGenerator() {
   const isPin = config.mode === 'pin';
 
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+    <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
       {/* Main column: display + controls */}
-      <div className="min-w-0 space-y-6">
+      <div className="min-w-0 space-y-5">
         <SectionCard
           title="Generator"
           description="Your passwords are generated locally in your browser. They are not sent to our servers."
         >
-          <div role="tablist" aria-label="Generation mode" className="mb-6 grid grid-cols-3 gap-1 rounded-lg bg-zinc-100 p-1 dark:bg-zinc-800">
+          <div role="tablist" aria-label="Generation mode" className="mb-6 grid grid-cols-3 gap-1 rounded-lg border border-line bg-surface p-1">
             {MODES.map((mode) => {
               const Icon = mode.icon;
               const active = config.mode === mode.id;
@@ -61,14 +61,15 @@ export function PasswordGenerator() {
                   role="tab"
                   aria-selected={active}
                   onClick={() => updateConfig({ mode: mode.id })}
-                  className={`flex min-h-[44px] items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:focus-visible:ring-blue-400 ${
+                  className={`flex min-h-[44px] items-center justify-center gap-2 rounded-md px-2 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
                     active
-                      ? 'bg-white text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-50'
-                      : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100'
+                      ? 'bg-raised text-ink shadow-[0_1px_2px_rgb(0_0_0/0.08)]'
+                      : 'text-muted can-hover:hover:text-ink active:text-ink'
                   }`}
                 >
-                  <Icon className="h-4 w-4" aria-hidden="true" />
-                  {mode.label}
+                  <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+                  {/* Icon-only on narrow screens: labels would truncate. */}
+                  <span className="hidden truncate min-[480px]:inline">{mode.label}</span>
                 </button>
               );
             })}
@@ -77,16 +78,16 @@ export function PasswordGenerator() {
           {error ? (
             <div
               role="alert"
-              className="mb-4 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300"
+              className="mb-4 flex items-start gap-2.5 rounded-lg border border-danger/30 bg-danger/10 px-4 py-3 text-sm text-ink"
             >
-              <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+              <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-danger" aria-hidden="true" />
               <span>{error}</span>
             </div>
           ) : null}
 
           <PasswordDisplay password={password} onRegenerate={regenerate} disabled={!!error} />
 
-          <div className="mt-6 space-y-6">
+          <div className="mt-7 space-y-7 border-t border-line pt-7">
             {!isPassphrase ? (
               <PasswordLength
                 value={config.length}
@@ -99,7 +100,7 @@ export function PasswordGenerator() {
               <CharacterOptions config={config} onChange={updateConfig} />
             ) : null}
             {isPin ? (
-              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+              <p className="text-sm leading-relaxed text-muted">
                 PIN mode uses digits only. Adjust the length above, or open advanced options to exclude specific
                 digits.
               </p>
@@ -109,17 +110,17 @@ export function PasswordGenerator() {
         </SectionCard>
 
         <SectionCard title="How it stays private">
-          <ul className="space-y-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-            <li className="flex gap-2">
-              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-500" aria-hidden="true" />
+          <ul className="space-y-2.5 text-sm leading-relaxed text-muted">
+            <li className="flex gap-2.5">
+              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden="true" />
               Randomness comes from your browser’s Web Crypto API — never from predictable generators.
             </li>
-            <li className="flex gap-2">
-              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-500" aria-hidden="true" />
+            <li className="flex gap-2.5">
+              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden="true" />
               Everything runs on this page. No account, no analytics, no network requests with your passwords.
             </li>
-            <li className="flex gap-2">
-              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-500" aria-hidden="true" />
+            <li className="flex gap-2.5">
+              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden="true" />
               Generated passwords are never saved — not in this browser’s storage, not in the page address, nowhere.
             </li>
           </ul>
@@ -127,7 +128,7 @@ export function PasswordGenerator() {
       </div>
 
       {/* Secondary column: strength, presets, history */}
-      <div className="min-w-0 space-y-6">
+      <div className="min-w-0 space-y-5">
         <SectionCard title="Strength">
           <StrengthIndicator config={config} bits={entropyBits} label={strength} />
         </SectionCard>

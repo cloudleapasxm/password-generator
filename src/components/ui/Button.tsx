@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
-type Variant = 'primary' | 'secondary' | 'ghost' | 'danger-ghost';
+type Variant = 'primary' | 'success' | 'secondary' | 'ghost' | 'danger-ghost';
 type Size = 'sm' | 'md' | 'icon';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -9,27 +9,34 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
 }
 
+const FOCUS =
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-canvas';
+
+// Hover styles use the can-hover variant so touch devices never get stuck
+// hover states; :active gives pressed feedback on touch.
 const variants: Record<Variant, string> = {
   primary:
-    'bg-blue-700 text-white hover:bg-blue-800 active:bg-blue-900 dark:bg-blue-600 dark:hover:bg-blue-500 dark:active:bg-blue-600',
+    'bg-accent text-accent-ink can-hover:hover:bg-accent-strong active:bg-accent-strong',
+  // Transient copy-success state: restrained green, steady on hover/press.
+  success: 'bg-success-strong text-success-ink active:bg-success-strong',
   secondary:
-    'bg-zinc-100 text-zinc-900 hover:bg-zinc-200 active:bg-zinc-300 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700 dark:active:bg-zinc-600 border border-zinc-200 dark:border-zinc-700',
+    'border border-line bg-raised text-ink can-hover:hover:border-line-strong can-hover:hover:bg-surface active:bg-surface',
   ghost:
-    'text-zinc-700 hover:bg-zinc-100 active:bg-zinc-200 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:active:bg-zinc-700',
+    'text-muted can-hover:hover:bg-surface can-hover:hover:text-ink active:bg-surface active:text-ink',
   'danger-ghost':
-    'text-red-700 hover:bg-red-50 active:bg-red-100 dark:text-red-400 dark:hover:bg-red-950/40 dark:active:bg-red-950/60',
+    'text-danger can-hover:hover:bg-danger/10 active:bg-danger/15',
 };
 
 const sizes: Record<Size, string> = {
   sm: 'h-9 px-3 text-sm',
-  md: 'h-11 px-5 text-sm min-h-[44px]',
-  icon: 'h-11 w-11 min-h-[44px] min-w-[44px] p-0',
+  md: 'h-11 min-h-[44px] px-5 text-sm',
+  icon: 'h-11 min-h-[44px] w-11 min-w-[44px] p-0',
 };
 
 export function Button({ variant = 'secondary', size = 'md', className = '', children, ...rest }: ButtonProps) {
   return (
     <button
-      className={`inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-zinc-900 disabled:cursor-not-allowed disabled:opacity-50 ${variants[variant]} ${sizes[size]} ${className}`}
+      className={`inline-flex select-none items-center justify-center gap-2 rounded-lg font-medium transition-colors duration-150 motion-reduce:transition-none disabled:cursor-not-allowed disabled:opacity-50 ${FOCUS} ${variants[variant]} ${sizes[size]} ${className}`}
       {...rest}
     >
       {children}

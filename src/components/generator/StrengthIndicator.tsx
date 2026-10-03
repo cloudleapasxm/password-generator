@@ -9,7 +9,10 @@ interface StrengthIndicatorProps {
 
 const SEGMENT_LABELS = ['Weak', 'Fair', 'Good', 'Strong', 'Very Strong'];
 
-/** Strength meter: segmented bar + label + entropy bits + explanation. */
+/**
+ * Restrained strength readout: a compact segmented meter, a text label
+ * (never color alone), the estimated entropy, and an honest explanation.
+ */
 export function StrengthIndicator({ config, bits, label }: StrengthIndicatorProps) {
   const level = strengthLevel(bits);
 
@@ -24,26 +27,26 @@ export function StrengthIndicator({ config, bits, label }: StrengthIndicatorProp
           <span
             key={segment}
             aria-hidden="true"
-            className={`h-2 flex-1 rounded-full transition-all duration-300 motion-reduce:transition-none ${
+            className={`h-1.5 flex-1 rounded-full transition-colors duration-200 motion-reduce:transition-none ${
               i <= level
                 ? level <= 1
-                  ? 'bg-red-500 dark:bg-red-400'
+                  ? 'bg-danger'
                   : level === 2
-                    ? 'bg-amber-500 dark:bg-amber-400'
-                    : 'bg-emerald-600 dark:bg-emerald-500'
-                : 'bg-zinc-200 dark:bg-zinc-700'
+                    ? 'bg-warn'
+                    : 'bg-success'
+                : 'bg-line'
             }`}
           />
         ))}
       </div>
-      <div className="mt-3 flex items-baseline justify-between gap-2">
-        <p className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">{label}</p>
-        <p className="font-mono text-sm text-zinc-600 dark:text-zinc-400" aria-label={`Estimated entropy ${Math.round(bits)} bits`}>
+      <div className="mt-3 flex items-baseline justify-between gap-3">
+        <p className="text-base font-semibold text-ink">{label}</p>
+        <p className="font-mono text-sm tabular-nums text-muted" aria-label={`Estimated entropy ${Math.round(bits)} bits`}>
           ~{Math.round(bits)} bits
         </p>
       </div>
-      <p className="mt-2 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">{strengthExplanation(config, bits)}</p>
-      <p className="mt-2 text-xs leading-relaxed text-zinc-400 dark:text-zinc-500">
+      <p className="mt-2 text-xs leading-relaxed text-muted">{strengthExplanation(config, bits)}</p>
+      <p className="mt-2 text-xs leading-relaxed text-faint">
         An estimate for comparing settings — not a guarantee against phishing, reuse, or leaked databases.
       </p>
     </div>

@@ -1,17 +1,18 @@
 ---
+import { link } from '../../lib/site';
 /** Minimal static footer — no client JS needed. */
 ---
 
-<footer class="border-t border-zinc-200 dark:border-zinc-800">
-  <div class="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-6 text-sm text-zinc-500 sm:flex-row sm:items-center sm:justify-between sm:px-6 dark:text-zinc-400">
+<footer class="border-t border-line">
+  <div class="sp-container flex flex-col gap-3 py-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
     <p>
-      <span class="font-semibold text-zinc-700 dark:text-zinc-300">SecurePass</span>
+      <span class="font-semibold text-ink">SecurePass</span>
       {' '}— passwords are generated locally in your browser.
     </p>
-    <nav aria-label="Footer" class="flex items-center gap-4">
-      <a href="/about" class="rounded hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:hover:text-zinc-100">About</a>
-      <a href="/privacy" class="rounded hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:hover:text-zinc-100">Privacy</a>
-      <a href="https://github.com/cloudleapasxm/password-generator" class="rounded hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:hover:text-zinc-100">GitHub</a>
+    <nav aria-label="Footer" class="flex flex-wrap items-center gap-x-5 gap-y-2">
+      <a href={link('about')} class="rounded transition-colors duration-150 can-hover:hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">About</a>
+      <a href={link('privacy')} class="rounded transition-colors duration-150 can-hover:hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">Privacy</a>
+      <a href="https://github.com/cloudleapasxm/password-generator" class="rounded transition-colors duration-150 can-hover:hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">GitHub</a>
     </nav>
   </div>
 </footer>

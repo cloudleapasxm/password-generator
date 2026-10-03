@@ -23,33 +23,30 @@ export function HistoryPanel({ enabled, onToggle, entries, onRemove, onClear }: 
 
   return (
     <div>
-      <label
-        htmlFor="history-toggle"
-        className="flex min-h-[44px] cursor-pointer items-center justify-between gap-3"
-      >
-        <span className="flex items-center gap-2 text-sm font-medium text-zinc-900 dark:text-zinc-100">
-          <History className="h-4 w-4 text-zinc-500 dark:text-zinc-400" aria-hidden="true" />
+      <div className="flex min-h-[44px] items-center justify-between gap-3">
+        <span className="flex items-center gap-2 text-sm font-medium text-ink">
+          <History className="h-4 w-4 text-muted" aria-hidden="true" />
           Remember generated passwords
         </span>
         <button
-          id="history-toggle"
           type="button"
           role="switch"
           aria-checked={enabled}
+          aria-label="Remember generated passwords"
           onClick={() => onToggle(!enabled)}
-          className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:focus-visible:ring-blue-400 ${
-            enabled ? 'bg-blue-700 dark:bg-blue-600' : 'bg-zinc-300 dark:bg-zinc-700'
+          className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-raised ${
+            enabled ? 'bg-accent' : 'bg-line-strong'
           }`}
         >
           <span
             aria-hidden="true"
-            className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-150 motion-reduce:transition-none ${
+            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-150 motion-reduce:transition-none ${
               enabled ? 'translate-x-6' : 'translate-x-1'
             }`}
           />
         </button>
-      </label>
-      <p className="mt-1 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+      </div>
+      <p className="mt-1 text-xs leading-relaxed text-muted">
         {enabled
           ? 'History is kept in memory only while this page is open. It is never saved, synced, or sent anywhere — it disappears when you reload or close the tab.'
           : 'Off by default. When on, recent passwords stay in this tab’s memory only.'}
@@ -61,19 +58,19 @@ export function HistoryPanel({ enabled, onToggle, entries, onRemove, onClear }: 
             {entries.map((entry) => (
               <li
                 key={entry.id}
-                className="flex items-center gap-2 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-800/60"
+                className="flex items-center gap-2 rounded-lg border border-line bg-surface px-3 py-2 transition-colors duration-200 motion-reduce:transition-none"
               >
-                <span className="min-w-0 flex-1 truncate font-mono text-sm text-zinc-800 dark:text-zinc-200" title={entry.summary}>
+                <span className="min-w-0 flex-1 truncate font-mono text-sm text-ink" title={entry.summary}>
                   {'•'.repeat(Math.min(entry.value.length, 24))}
                 </span>
-                <span className="hidden text-xs text-zinc-500 dark:text-zinc-400 sm:block">{entry.summary}</span>
+                <span className="hidden text-xs text-muted min-[420px]:block">{entry.summary}</span>
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
                   onClick={() => copyEntry(entry.value)}
                   aria-label={`Copy password from ${entry.summary}`}
-                  className="!h-9 !w-9 !min-h-[36px] !min-w-[36px]"
+                  className="h-9 min-h-[36px] w-9 min-w-[36px]"
                 >
                   <Copy className="h-4 w-4" aria-hidden="true" />
                 </Button>
@@ -83,7 +80,7 @@ export function HistoryPanel({ enabled, onToggle, entries, onRemove, onClear }: 
                   size="icon"
                   onClick={() => onRemove(entry.id)}
                   aria-label={`Remove password from ${entry.summary}`}
-                  className="!h-9 !w-9 !min-h-[36px] !min-w-[36px]"
+                  className="h-9 min-h-[36px] w-9 min-w-[36px]"
                 >
                   <X className="h-4 w-4" aria-hidden="true" />
                 </Button>

@@ -2,8 +2,126 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ---- App load fade-in (restrained, skippable) ---- */
-@keyframes app-fade-in {
+/* ============================================================
+   SecurePass design tokens
+   Single source of truth for color. Components use the Tailwind
+   semantic colors (bg-canvas, text-ink, border-line, …) which
+   read these variables — never hardcode palette values.
+   ============================================================ */
+:root {
+  color-scheme: light;
+
+  /* Canvas & surfaces */
+  --sp-canvas: 255 255 255; /* page background            #FFFFFF */
+  --sp-surface: 250 250 250; /* subtle surface             #FAFAFA */
+  --sp-raised: 255 255 255; /* cards / elevated           #FFFFFF */
+
+  /* Text */
+  --sp-ink: 23 23 23; /* primary text               #171717 */
+  --sp-muted: 115 115 115; /* secondary text             #737373 */
+  --sp-faint: 150 150 150; /* tertiary / placeholder     #969696 */
+
+  /* Borders */
+  --sp-line: 229 229 229; /* hairlines                  #E5E5E5 */
+  --sp-line-strong: 209 209 209; /* emphasized borders         #D1D1D1 */
+
+  /* Accent (restrained blue) */
+  --sp-accent: 37 99 235; /* primary actions            #2563EB */
+  --sp-accent-strong: 29 78 216; /* accent hover/pressed       #1D4ED8 */
+  --sp-accent-ink: 255 255 255; /* text on accent             #FFFFFF */
+
+  /* Feedback */
+  --sp-success: 5 150 105; /* restrained green           #059669 */
+  --sp-success-strong: 4 120 87; /* filled success surfaces    #047857 */
+  --sp-success-ink: 255 255 255; /* text on filled success     #FFFFFF */
+  --sp-danger: 220 38 38; /* accessible red             #DC2626 */
+  --sp-warn: 180 120 10; /* restrained amber           #B4780A */
+
+  /* Motion */
+  --sp-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --sp-duration-fast: 150ms;
+  --sp-duration-med: 200ms;
+
+  /* Layout */
+  --sp-container: 60rem; /* ≈960px content width */
+  --sp-radius-sm: 6px;
+  --sp-radius-md: 8px;
+  --sp-radius-lg: 12px;
+}
+
+.dark {
+  color-scheme: dark;
+
+  --sp-canvas: 17 17 17; /* #111111 */
+  --sp-surface: 25 25 25; /* #191919 */
+  --sp-raised: 32 32 32; /* #202020 */
+
+  --sp-ink: 245 245 245; /* #F5F5F5 */
+  --sp-muted: 163 163 163; /* #A3A3A3 */
+  --sp-faint: 120 120 120; /* #787878 */
+
+  --sp-line: 48 48 48; /* #303030 */
+  --sp-line-strong: 68 68 68; /* #444444 */
+
+  --sp-accent: 122 167 255; /* #7AA7FF */
+  --sp-accent-strong: 148 186 255; /* lighter on hover in dark  #94BAFF */
+  --sp-accent-ink: 17 17 17; /* dark text keeps contrast on the light accent */
+
+  --sp-success: 52 211 153; /* #34D399 */
+  --sp-success-strong: 52 211 153; /* #34D399 */
+  --sp-success-ink: 17 17 17; /* #111111 */
+  --sp-danger: 248 113 113; /* #F87171 */
+  --sp-warn: 251 191 36; /* #FBBF24 */
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: rgb(var(--sp-canvas));
+  color: rgb(var(--sp-ink));
+  transition:
+    background-color var(--sp-duration-med) ease-out,
+    color var(--sp-duration-med) ease-out;
+}
+
+::selection {
+  background: rgb(var(--sp-accent) / 0.22);
+}
+
+/* Consistent, visible keyboard focus for natively focusable elements
+   that don't define their own ring. */
+:focus-visible {
+  outline: 2px solid rgb(var(--sp-accent));
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ============================================================
+   Layout helpers
+   ============================================================ */
+@layer components {
+  .sp-container {
+    width: 100%;
+    max-width: var(--sp-container);
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 40rem) {
+    .sp-container {
+      padding-inline: 1.5rem;
+    }
+  }
+}
+
+/* ============================================================
+   Entrance + content micro-animations (restrained, skippable)
+   ============================================================ */
+@keyframes sp-fade-up {
   from {
     opacity: 0;
     transform: translateY(4px);
@@ -15,24 +133,85 @@
 }
 
 .app-fade-in {
-  animation: app-fade-in 0.35s ease-out both;
+  animation: sp-fade-up 0.35s var(--sp-ease-out) both;
 }
 
-/* ---- Regenerate button: subtle rotation on press ---- */
+/* Brief opacity settle when a new password renders. Keyed by the
+   password value in React so it replays per regeneration. */
+@keyframes sp-pw-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.pw-fade {
+  animation: sp-pw-in 160ms ease-out;
+}
+
+/* Regenerate affordance: icon nudges on press (touch) / hover (desktop). */
+.btn-regenerate svg {
+  transition: transform var(--sp-duration-med) var(--sp-ease-out);
+}
 .btn-regenerate:active svg {
   transform: rotate(120deg);
 }
-.btn-regenerate svg {
-  transition: transform 0.25s ease;
+@media (hover: hover) and (pointer: fine) {
+  .btn-regenerate:hover svg {
+    transform: rotate(60deg);
+  }
 }
 
-/* ---- Range slider (webkit + moz) ---- */
+/* Reveal/hide icon: tiny scale settle so the swap feels deliberate. */
+.btn-reveal svg {
+  transition:
+    transform var(--sp-duration-fast) var(--sp-ease-out),
+    opacity var(--sp-duration-fast) ease-out;
+}
+.btn-reveal:active svg {
+  transform: scale(0.88);
+}
+
+/* ============================================================
+   Animated disclosure (advanced options)
+   Grid-rows trick: smooth height animation without JS measuring.
+   ============================================================ */
+.sp-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--sp-duration-med) var(--sp-ease-out);
+}
+[data-open='true'] .sp-collapse {
+  grid-template-rows: 1fr;
+}
+.sp-collapse-inner {
+  overflow: hidden;
+  min-height: 0;
+  visibility: hidden;
+  transition: visibility 0ms linear var(--sp-duration-med);
+}
+[data-open='true'] .sp-collapse-inner {
+  visibility: visible;
+  transition-delay: 0ms;
+}
+.sp-collapse-chevron {
+  transition: transform var(--sp-duration-med) var(--sp-ease-out);
+}
+[data-open='true'] .sp-collapse-chevron {
+  transform: rotate(180deg);
+}
+
+/* ============================================================
+   Range slider (webkit + moz), token-driven
+   ============================================================ */
 .pw-slider {
   -webkit-appearance: none;
   appearance: none;
   height: 28px; /* generous touch target */
   background: transparent;
   cursor: pointer;
+  --sp-slider-track: var(--sp-line);
 }
 .pw-slider:focus {
   outline: none;
@@ -40,10 +219,8 @@
 .pw-slider::-webkit-slider-runnable-track {
   height: 6px;
   border-radius: 9999px;
-  background: #e4e4e7;
-}
-.dark .pw-slider::-webkit-slider-runnable-track {
-  background: #3f3f46;
+  background: rgb(var(--sp-slider-track));
+  transition: background-color var(--sp-duration-fast) ease-out;
 }
 .pw-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -52,43 +229,89 @@
   height: 20px;
   width: 20px;
   border-radius: 9999px;
-  background: #1d4ed8;
-  border: 2px solid #ffffff;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.15);
-}
-.dark .pw-slider::-webkit-slider-thumb {
-  background: #60a5fa;
-  border-color: #18181b;
+  background: rgb(var(--sp-accent));
+  border: 2px solid rgb(var(--sp-raised));
+  transition:
+    background-color var(--sp-duration-fast) ease-out,
+    transform var(--sp-duration-fast) var(--sp-ease-out);
 }
 .pw-slider::-moz-range-track {
   height: 6px;
   border-radius: 9999px;
-  background: #e4e4e7;
-}
-.dark .pw-slider::-moz-range-track {
-  background: #3f3f46;
+  background: rgb(var(--sp-slider-track));
 }
 .pw-slider::-moz-range-thumb {
   height: 16px;
   width: 16px;
   border-radius: 9999px;
-  background: #1d4ed8;
-  border: 2px solid #ffffff;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.15);
-}
-.dark .pw-slider::-moz-range-thumb {
-  background: #60a5fa;
-  border-color: #18181b;
+  background: rgb(var(--sp-accent));
+  border: 2px solid rgb(var(--sp-raised));
 }
 .pw-slider:focus-visible::-webkit-slider-thumb {
-  outline: 2px solid #1d4ed8;
+  outline: 2px solid rgb(var(--sp-accent));
   outline-offset: 2px;
 }
-.dark .pw-slider:focus-visible::-webkit-slider-thumb {
-  outline-color: #60a5fa;
+.pw-slider:focus-visible::-moz-range-thumb {
+  outline: 2px solid rgb(var(--sp-accent));
+  outline-offset: 2px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .pw-slider:hover::-webkit-slider-thumb {
+    transform: scale(1.1);
+  }
+}
+.pw-slider:active::-webkit-slider-thumb {
+  transform: scale(1.1);
 }
 
-/* ---- Screen-reader-only utility ---- */
+/* Number input: hide spinners for the compact length field. */
+input.sp-number::-webkit-outer-spin-button,
+input.sp-number::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input.sp-number {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* ============================================================
+   Tooltip (CSS-only, desktop hover + keyboard focus)
+   ============================================================ */
+.sp-tooltip {
+  pointer-events: none;
+  position: absolute;
+  top: -2.25rem;
+  left: 50%;
+  z-index: 10;
+  transform: translate(-50%, 2px);
+  white-space: nowrap;
+  border-radius: var(--sp-radius-sm);
+  background: rgb(var(--sp-ink));
+  color: rgb(var(--sp-canvas));
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  opacity: 0;
+  transition:
+    opacity var(--sp-duration-fast) ease-out,
+    transform var(--sp-duration-fast) var(--sp-ease-out);
+}
+.group\/tooltip:hover .sp-tooltip,
+.group\/tooltip:focus-within .sp-tooltip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+@media (hover: none) {
+  .sp-tooltip {
+    display: none;
+  }
+}
+
+/* ============================================================
+   Screen-reader-only utility
+   ============================================================ */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -101,7 +324,9 @@
   border: 0;
 }
 
-/* ---- Respect reduced motion everywhere ---- */
+/* ============================================================
+   Respect reduced motion everywhere
+   ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -110,7 +335,14 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  .app-fade-in {
+  .app-fade-in,
+  .pw-fade {
     animation: none;
+  }
+  .sp-collapse {
+    transition: none;
+  }
+  .sp-collapse-inner {
+    transition: none;
   }
 }
