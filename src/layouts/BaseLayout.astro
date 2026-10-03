@@ -1,0 +1,63 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+}
+
+const { title, description, canonicalPath = '/' } = Astro.props;
+const site = 'https://cloudleapasxm.github.io/password-generator';
+const canonical = new URL(canonicalPath, site).toString();
+const ogImage = new URL('/favicon.svg', site).toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#18181b" media="(prefers-color-scheme: dark)" />
+
+    {/* Open Graph */}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="SecurePass" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+
+    {/* Twitter */}
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    {/* Apply the saved theme before first paint to avoid a theme flash.
+        Only the theme *preference* is read here — never any password data. */}
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem('securepass-theme') || 'system';
+          var dark =
+            stored === 'dark' ||
+            (stored === 'system' &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.classList.toggle('dark', dark);
+        } catch (e) {
+          /* storage unavailable: leave the default (light) theme */
+        }
+      })();
+    </script>
+  </head>
+  <body class="bg-white font-sans text-zinc-900 antialiased transition-colors duration-200 motion-reduce:transition-none dark:bg-zinc-900 dark:text-zinc-100">
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,1 @@
+{"compilerOptions":{"jsx":"react-jsx","jsxImportSource":"react","noUnusedLocals":true,"noUnusedParameters":true,"types":["vitest/globals","node"]},"extends":"astro/tsconfigs/strict","include":["src","tests","astro.config.mjs","tailwind.config.mjs","vitest.config.ts"]}
